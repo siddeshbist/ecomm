@@ -87,23 +87,36 @@ class UsersRepository{
 
     }
 
-const test = async()=>{
-    const repo = new UsersRepository('users.json');
-    await repo.create({email:'test@test2.com',password:'password2'});
-    //const users= await repo.getAll();
-    //const user = await repo.getOne('65a14475')
-    //console.log(user);
-   // await repo.delete('65a14475')
-   //await repo.create({email:'test@test.com'});
-   //await repo.update('ea97eecb',{DOB: '07/26/1998'});
-   const user = await repo.getOneBy({email:'test@test2.com'});
-   console.log(user)
-};
+//test function
 
- test();
+// const test = async()=>{
+//     const repo = new UsersRepository('users.json');
+//     await repo.create({email:'test@test2.com',password:'password2'});
+//     //const users= await repo.getAll();
+//     //const user = await repo.getOne('65a14475')
+//     //console.log(user);
+//    // await repo.delete('65a14475')
+//    //await repo.create({email:'test@test.com'});
+//    //await repo.update('ea97eecb',{DOB: '07/26/1998'});
+//    const user = await repo.getOneBy({email:'test@test2.com'});
+//    console.log(user)
+// };
 
+//  test();
 
-    
+//making code available to other files in the project, first way
+// module.exports = UserRepository;
 
-
+//ANOTHER FILE
+// const UserRepository = require('./users');
+// //pass in name of file to constructor -- if name of file is entered incorrectly cause bugs!
 // const repo = new UsersRepository('users.json');
+
+//better way, export an instance of the class
+module.exports = new UserRepository('users.json');
+
+//using second way in another file we would just need to the following to call the file
+// const repo = require('./users');
+//can now call all the methods in the class
+// repo.getAll();
+// get.getOne();

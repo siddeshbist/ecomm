@@ -1,5 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser'); //existing library similar to bodyparser that we created to act as middlewear to read form data
+const usersRepo = require('./repositories/users');
+
 
 const app = express();
 
@@ -40,7 +42,7 @@ app.get('/',(req,res) => {
 // }
 
 //this route is activated when submit button is pressend on form as a post request is being sent to /
-app.post('/',(req,res)=>{
+app.post('/',async(req,res)=>{
     //see contents of form data is in the incoming request
     // req.on('data',data =>{
     //     const parsed = data.toString('utf8').split('&');
@@ -51,8 +53,19 @@ app.post('/',(req,res)=>{
             //}
             //console.log(formData);
     // });
+    const {email,password,passwordConfirmation} = req.body;
+    //to check if email aleady exists
+    const existingUser = await usersRepo.getOneBy({email});
+    if(existingUser){
+        return res.send('Email is use');
+    }
+
+    if (password !== passwordConfirmation){
+        return res.send("Passwords much match")
+    }
+
     res.send('Account Created');
-    console.log(req.body);
+    //console.log(req.body);
 });
 
 app.listen(3000, ()=> {
