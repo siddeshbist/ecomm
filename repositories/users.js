@@ -1,5 +1,8 @@
 const fs = require('fs');
 const crypto = require('crypto');
+const util = require('util');
+ //promisify takes orginal callback based function and turns it into a promise and then we can use combine its use with await
+const scrypt = util.promisify(crypto.scrypt)
 
 class UsersRepository{
     constructor(filename){
@@ -25,12 +28,20 @@ class UsersRepository{
         }
 
         async create(attrs){
+            //attrs === {email:'',password:''}
             attrs.id = this.randomId();
+            const salt = crypto.randomBytes(8).toString('hex');
+            const buf = await scrypt(attrs.password,salt,64);
+
             const records = await this.getAll();
-            records.push(attrs);
+            const record = {
+                ...attrs, //get all properties of attrs and then replace the password 
+                password: `${buf.toString('hex')}.${salt}`
+            };
+            records.push(record);
             //write the updated 'records' array back to this.filename
             await this.writeAll(records);
-            return attrs;
+            return record;
 
         }
         async writeAll(records){

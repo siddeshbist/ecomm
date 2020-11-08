@@ -14,10 +14,10 @@ app.use(cookieSession({
 );
 
 //second argument in route handler is a callback function 
-app.get('/',(req,res) => {
+app.get('/signup',(req,res) => {
     res.send(`
     <div>
-    // http method assosciated with form is POST, info is in the request body not as query string like GET
+        Your ID is: ${req.session.userId}
         <form method='POST'>
             <input name="email" placeholder="email"/>
             <input name="password" placeholder="password"/>
@@ -47,7 +47,7 @@ app.get('/',(req,res) => {
 // }
 
 //this route is activated when submit button is pressend on form as a post request is being sent to /
-app.post('/',async(req,res)=>{
+app.post('/signup',async(req,res)=>{
     //see contents of form data is in the incoming request
     // req.on('data',data =>{
     //     const parsed = data.toString('utf8').split('&');
@@ -81,6 +81,41 @@ app.post('/',async(req,res)=>{
     res.send('Account Created');
     //console.log(req.body);
 });
+
+
+app.get('/signout',(req,res)=>{
+    req.session = null;
+    res.send('You are logged out')
+});
+
+app.get('/signin',(req,res) =>{
+    res.send(`<div>
+        <form method='POST'>
+            <input name="email" placeholder="email"/>
+            <input name="password" placeholder="password"/>
+            <button>Sign In</button>
+        </form>
+    </div>
+    `);
+});
+
+app.post('/signin',async (req,res)=>{
+    const{email,password} = req.body;
+    const user = await usersRepo.getOneBy({email});
+
+    if(!user){
+        return res.send('Email not found');
+    }
+
+    if(user.password !== password){
+        return res.send('Invalid password')
+    }
+
+    req.session.userId = user.id;
+
+    res.send('You are signed in');
+});
+
 
 app.listen(3000, ()=> {
     console.log('Listening');

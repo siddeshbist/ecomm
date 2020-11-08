@@ -11,5 +11,20 @@
     "email": "cavemanb@hotmail.com",
     "password": "myhouserules",
     "id": "ab6fc1d4"
+  },
+  {
+    "email": "test3@test.com",
+    "password": "asdf",
+    "id": "3e9ed69f"
+  },
+  {
+    "email": "test4@test.com",
+    "password": "password",
+    "id": "d919d343"
+  },
+  {
+    "email": "test5@test.com",
+    "password": "f56fb303f76628e741063881a0796446b12de8cfa5758dd598aa1ceb2d7a24ce5488db502fb754b9800d4641381d5f55e30c1f9d77f35a1675ffc8498d831cc6.da6435c63a00c041",
+    "id": "163e4df3"
   }
 ]
