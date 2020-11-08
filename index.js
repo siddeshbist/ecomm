@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser'); //existing library similar to bodyparser that we created to act as middlewear to read form data
+const cookieSession = require('cookie-session');
 const usersRepo = require('./repositories/users');
 
 
@@ -7,6 +8,10 @@ const app = express();
 
 //body parser will be applied globally to all route handler requests
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(cookieSession({
+    keys: ['sadfasfd807dfg']
+})
+);
 
 //second argument in route handler is a callback function 
 app.get('/',(req,res) => {
@@ -63,6 +68,15 @@ app.post('/',async(req,res)=>{
     if (password !== passwordConfirmation){
         return res.send("Passwords much match")
     }
+
+    //Create a user in our user repo to represent this person
+    const user = await usersRepo.create({email,password});
+
+    //Store the id of that user inside the users cookie
+    req.session.userId = user.id; // Added by cookie session
+
+
+
 
     res.send('Account Created');
     //console.log(req.body);

@@ -30,7 +30,7 @@ class UsersRepository{
             records.push(attrs);
             //write the updated 'records' array back to this.filename
             await this.writeAll(records);
-            
+            return attrs;
 
         }
         async writeAll(records){
@@ -113,7 +113,7 @@ class UsersRepository{
 // const repo = new UsersRepository('users.json');
 
 //better way, export an instance of the class
-module.exports = new UserRepository('users.json');
+module.exports = new UsersRepository('users.json');
 
 //using second way in another file we would just need to the following to call the file
 // const repo = require('./users');

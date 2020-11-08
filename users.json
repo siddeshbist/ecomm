@@ -1,5 +1,15 @@
 [
-    {
-        "email":"test@test.com"
-    }
+  {
+    "email": "test@test.com"
+  },
+  {
+    "email": "test@test2.com",
+    "password": "asdf",
+    "id": "d79f44f2"
+  },
+  {
+    "email": "cavemanb@hotmail.com",
+    "password": "myhouserules",
+    "id": "ab6fc1d4"
+  }
 ]
