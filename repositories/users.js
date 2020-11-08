@@ -1,6 +1,7 @@
 const fs = require('fs');
 const crypto = require('crypto');
 const util = require('util');
+const { Script } = require('vm');
  //promisify takes orginal callback based function and turns it into a promise and then we can use combine its use with await
 const scrypt = util.promisify(crypto.scrypt)
 
@@ -43,6 +44,21 @@ class UsersRepository{
             await this.writeAll(records);
             return record;
 
+        }
+
+        async comparePassword(saved,supplied){
+            //Saved -> password saved in our database.'hashed.salt'
+            //Supplied -> password give to us by a user trying to sign in 
+
+            // const result = saved.split('.');
+            // const hashed = result[0];
+            // const salt = result[1]
+
+            // above three lines can be written as 
+            const [hashed,salt] = saved.split('.');
+            const hashedSuppliedBuf = await scrypt(supplied,salt,64);
+
+            return hashed === hashedSuppliedBuf.toString('hex')
         }
         async writeAll(records){
             await fs.promises.writeFile(this.filename,JSON.stringify(records,null,2))
