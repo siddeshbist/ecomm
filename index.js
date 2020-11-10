@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser'); //existing library similar to bodyparser that we created to act as middlewear to read form data
 const cookieSession = require('cookie-session');
-const authRouter = require('./routes/admin/auth')
+const authRouter = require('./routes/admin/auth');
+const productsRouter = require('./routes/admin/products');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cookieSession({
 );
 //add this line to use router
 app.use(authRouter);
+app.use(productsRouter);
 
 app.listen(3000, ()=> {
     console.log('Listening');
