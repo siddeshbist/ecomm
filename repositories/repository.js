@@ -16,7 +16,17 @@ module.exports = class Repository{
         } catch(err){
             fs.writeFileSync(this.filename,'[]');
         }
-        }  
+        }
+        
+        async create(attrs){
+            attrs.id = this.randomId();
+
+            const records = await this.getAll();
+            records.push(attr);
+            await this.writeAll(records);
+
+            return attrs
+        }
 
         async getAll(){
             return JSON.parse (await fs.promises.readFile(this.filename,{encoding: 'utf-8'
