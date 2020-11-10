@@ -5,6 +5,8 @@ const authRouter = require('./routes/admin/auth')
 
 const app = express();
 
+//whenever a request to a url is made, express will look inside the public folder first
+app.use(express.static('public'));
 //body parser will be applied globally to all route handler requests
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(cookieSession({
