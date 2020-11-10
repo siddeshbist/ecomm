@@ -1,6 +1,7 @@
 //{req} is an object with multiple properties
+const layout = require('../layout')
 module.exports = ({req}) => {
-    return `
+    return layout({content: `
     
     <div>
         Your ID is: ${req.session.userId}
@@ -12,5 +13,5 @@ module.exports = ({req}) => {
         </form>
     </div>
     
-    `;
+    `});
 };
