@@ -3,6 +3,8 @@ const {check,validationResult} = require('express-validator');
 const usersRepo = require('../../repositories/users');
 const signupTemplate = require('../../views/admin/auth/signup');
 const signinTemplate = require('../../views/admin/auth/signin');
+//destructuring requireEmail object
+const {requireEmail,requirePassword,requirePasswordConfirmation} = require('./validators');
 
 const router = express.Router();
 
@@ -11,41 +13,14 @@ router.get('/signup',(req,res) => {
 });
 
 router.post('/signup',[
-    check('email')
-    .trim()
-    .normalizeEmail()
-    .isEmail()
-    .withMessage("Must be a valid email")
-    .custom(async (email) =>{
-        const existingUser = await usersRepo.getOneBy({email});
-        if(existingUser){
-            throw new Error('email in use')
-        }
-    }),
-    check('password').trim().isLength({min:4,max:20}).withMessage('Must be between 4 and 20 characters'),
-    check('passwordConfirmation')
-    .trim()
-    .isLength({min:4,max:20})
-    .withMessage('Must be between 4 and 20 characters')
-    //{req} contains password
-    .custom((passwordConfirmation,{req}) => {
-        if(passwordConfirmation !== req.body.password){
-            throw new Error('Passwords must match')
-        }
-    })],
+    requireEmail,
+    requirePassword,requirePasswordConfirmation],
     async(req,res)=>{
         const errors = validationResult(req);
-        console.log(errors)
-    //see contents of form data is in the incoming request
-    // req.on('data',data =>{
-    //     const parsed = data.toString('utf8').split('&');
-            //const formData = {};
-            //for(let pair of parsed){
-                //const[key,value] = pair.split('=');
-                //formData[key] = value;
-            //}
-            //console.log(formData);
-    // });
+        if(!errors.isEmpty()){
+            return res.send(signupTemplate({req,errors}));
+        }
+   
     const {email,password,passwordConfirmation} = req.body;
     //to check if email aleady exists
 
